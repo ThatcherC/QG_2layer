@@ -15,9 +15,6 @@ tpl=1/dt;   % dictates steps between plots in actual time
 tmax=2000; % time numerics run until
 
 
-U1=0;   %Background zonal velocity of the flow (Upper Layer)
-U2=0;   %Background zonal velocity of the flow (Lower Layer)  
-
 kappa=0;    %viscocity term-> when 0, no explicity viscosity. But there is some numerical dispersion    
 nx=4*128;ny=4*128;  %Sets Horizontal resolution
 dx=L/nx;    %X-grid spacing
@@ -30,6 +27,27 @@ k0y=2*pi/W;
 [x,y]=meshgrid([1/2:1:nx]/nx*L-L/2,[1/2:1:ny]/ny*W-W/2); 
 
 
+% del=10; %Ratio of layer depths
+% Rd=1; % Rossby Radius of Deformation
+F1=0; % F1=0 decouples layers. could be set to 1/Rd^2/(1+del);
+F2=1; %could be set to F1*del
+
+H1 = 1;
+H2 = 9;
+
+f=1;
+g_prime = 1;
+F1=f^2/(g_prime*H1);
+F2=f^2/(g_prime*H2);
+
+%% Background flow
+
+U1=0;   %Background zonal velocity of the flow (Upper Layer)
+U2=0;   %Background zonal velocity of the flow (Lower Layer)  
+
+U1 = +0.1*exp(abs(x));
+U2 = -0.01*exp(abs(x));
+
 %% Set beta and internal deformation radii
 beta1=0;% On f-plane so no beta in upper layer %Could be set to beta+F1*(U1-U2) with beta=1.728e-3  
 %beta2=beta-F2*(U1-U2);  
@@ -39,11 +57,6 @@ beta1=0;% On f-plane so no beta in upper layer %Could be set to beta+F1*(U1-U2) 
 yy=y(:,1);
 al=1; %Parameter that controls asymmetry of topography
 Qy=sech(yy).^2.*(yy<=0)+sech(al*yy).^2.*(yy>0); %Gives tanh(y) topography.
-
-% del=10; %Ratio of layer depths
-% Rd=1; % Rossby Radius of Deformation
-F1=0; % F1=0 decouples layers. could be set to 1/Rd^2/(1+del);
-F2=1; %could be set to F1*del
 
 %% Define Operators used in time stepping code
 wv2=(k.*k+l.*l);    %k^2+l^2
