@@ -38,7 +38,7 @@ P=[];
 
 % Transform PV in both layers into spectral space
 qh1=fft2(q1);
-%qh2=fft2(q2); %already have qh2 from QG_2_Layer_Parameters.m
+qh2=fft2(q2); %already have qh2 from QG_2_Layer_Parameters.m
 
 dqh1dt_p=0;
 dqh2dt_p=0;
